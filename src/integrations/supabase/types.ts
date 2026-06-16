@@ -14,7 +14,90 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          credits_reset_at: string
+          credits_used_today: number
+          daily_credits: number
+          email: string | null
+          full_name: string | null
+          id: string
+          plan: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          credits_reset_at?: string
+          credits_used_today?: number
+          daily_credits?: number
+          email?: string | null
+          full_name?: string | null
+          id: string
+          plan?: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          credits_reset_at?: string
+          credits_used_today?: number
+          daily_credits?: number
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          plan?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      uploads: {
+        Row: {
+          bytes: number | null
+          created_at: string
+          error: string | null
+          expires_at: string
+          height: number | null
+          id: string
+          original_filename: string | null
+          original_path: string
+          result_path: string | null
+          status: string
+          user_id: string
+          width: number | null
+        }
+        Insert: {
+          bytes?: number | null
+          created_at?: string
+          error?: string | null
+          expires_at?: string
+          height?: number | null
+          id?: string
+          original_filename?: string | null
+          original_path: string
+          result_path?: string | null
+          status?: string
+          user_id: string
+          width?: number | null
+        }
+        Update: {
+          bytes?: number | null
+          created_at?: string
+          error?: string | null
+          expires_at?: string
+          height?: number | null
+          id?: string
+          original_filename?: string | null
+          original_path?: string
+          result_path?: string | null
+          status?: string
+          user_id?: string
+          width?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
