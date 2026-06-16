@@ -32,9 +32,11 @@ function Nav() {
           <a href="#faq" className="hover:text-foreground transition-colors">FAQ</a>
         </nav>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" className="hidden sm:inline-flex">Sign in</Button>
-          <Button size="sm" className="bg-gradient-brand text-primary-foreground border-0 glow-sm hover:opacity-90">
-            Get started
+          <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
+            <Link to="/auth">Sign in</Link>
+          </Button>
+          <Button asChild size="sm" className="bg-gradient-brand text-primary-foreground border-0 glow-sm hover:opacity-90">
+            <Link to="/auth">Get started</Link>
           </Button>
         </div>
       </div>
@@ -63,11 +65,11 @@ function Hero() {
               Studio-grade transparent backgrounds in seconds. Built for creators, e-commerce sellers, and product teams who need pixel-perfect cutouts at scale.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
-              <Button size="lg" className="bg-gradient-brand text-primary-foreground border-0 glow hover:opacity-90">
-                Try it free <ArrowRight className="ml-1 h-4 w-4" />
+              <Button asChild size="lg" className="bg-gradient-brand text-primary-foreground border-0 glow hover:opacity-90">
+                <Link to="/auth">Try it free <ArrowRight className="ml-1 h-4 w-4" /></Link>
               </Button>
-              <Button size="lg" variant="outline" className="border-white/15 bg-white/5 backdrop-blur hover:bg-white/10">
-                <Code2 className="mr-2 h-4 w-4" /> View API
+              <Button asChild size="lg" variant="outline" className="border-white/15 bg-white/5 backdrop-blur hover:bg-white/10">
+                <a href="#api"><Code2 className="mr-2 h-4 w-4" /> View API</a>
               </Button>
             </div>
             <div className="mt-8 flex items-center justify-center gap-6 text-xs text-muted-foreground lg:justify-start">
@@ -93,7 +95,7 @@ function Hero() {
             </div>
             <h3 className="mt-4 text-xl font-semibold">Drop an image to remove the background</h3>
             <p className="mt-2 text-sm text-muted-foreground">JPG, PNG, or WEBP · up to 10MB · 5000×5000 max</p>
-            <Button className="mt-6 bg-gradient-brand text-primary-foreground border-0">Choose file</Button>
+            <Button asChild className="mt-6 bg-gradient-brand text-primary-foreground border-0"><Link to="/auth">Choose file</Link></Button>
           </div>
         </div>
       </div>
