@@ -20,6 +20,22 @@ export const Route = createFileRoute("/")({
 });
 
 function Nav() {
+  const navigate = useNavigate();
+  const [signedIn, setSignedIn] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setSignedIn(!!data.session));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      setSignedIn(!!session);
+    });
+    return () => sub.subscription.unsubscribe();
+  }, []);
+
+  async function handleSignOut() {
+    await supabase.auth.signOut();
+    navigate({ to: "/" });
+  }
+
   return (
     <header className="sticky top-0 z-50 w-full">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
@@ -29,17 +45,30 @@ function Nav() {
         </Link>
         <nav className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">
           <a href="#features" className="hover:text-foreground transition-colors">Features</a>
-          <a href="#pricing" className="hover:text-foreground transition-colors">Pricing</a>
+          <Link to="/pricing" className="hover:text-foreground transition-colors">Pricing</Link>
           <a href="#api" className="hover:text-foreground transition-colors">API</a>
           <a href="#faq" className="hover:text-foreground transition-colors">FAQ</a>
         </nav>
         <div className="flex items-center gap-2">
-          <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
-            <Link to="/auth">Sign in</Link>
-          </Button>
-          <Button asChild size="sm" className="bg-gradient-brand text-primary-foreground border-0 glow-sm hover:opacity-90">
-            <Link to="/auth">Get started</Link>
-          </Button>
+          {signedIn ? (
+            <>
+              <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
+                <Link to="/dashboard">Dashboard</Link>
+              </Button>
+              <Button onClick={handleSignOut} size="sm" variant="outline" className="border-white/15 bg-white/5 hover:bg-white/10">
+                Sign out
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
+                <Link to="/auth">Sign in</Link>
+              </Button>
+              <Button asChild size="sm" className="bg-gradient-brand text-primary-foreground border-0 glow-sm hover:opacity-90">
+                <Link to="/auth">Get started</Link>
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </header>
