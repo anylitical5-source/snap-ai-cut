@@ -40,12 +40,13 @@ function AuthPage() {
           },
         });
         if (error) throw error;
-        toast.success("Account created. Check your inbox to verify.");
-        navigate({ to: "/dashboard" });
+        toast.success("Account created. Welcome!");
+        navigate({ to: "/" });
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        navigate({ to: "/dashboard" });
+        toast.success("Signed in");
+        navigate({ to: "/" });
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Auth failed");
@@ -57,10 +58,10 @@ function AuthPage() {
   async function onGoogle() {
     setLoading(true);
     try {
-      const res = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/dashboard" });
+      const res = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/" });
       if (res.error) throw res.error;
       if (res.redirected) return;
-      navigate({ to: "/dashboard" });
+      navigate({ to: "/" });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Google sign-in failed");
       setLoading(false);
