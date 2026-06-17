@@ -75,7 +75,21 @@ function Nav() {
   );
 }
 
+function useSignedIn() {
+  const [signedIn, setSignedIn] = useState(false);
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setSignedIn(!!data.session));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => setSignedIn(!!session));
+    return () => sub.subscription.unsubscribe();
+  }, []);
+  return signedIn;
+}
+
 function Hero() {
+  const signedIn = useSignedIn();
+  const ctaTo = signedIn ? "/dashboard" : "/auth";
+  const ctaLabel = signedIn ? "Open dashboard" : "Try it free";
+
   return (
     <section className="relative overflow-hidden">
       <div className="absolute inset-0 grid-bg opacity-40 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
@@ -86,7 +100,7 @@ function Hero() {
           <div className="text-center lg:text-left">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-muted-foreground backdrop-blur">
               <Sparkles className="h-3.5 w-3.5 text-[var(--neon-cyan)]" />
-              Powered by precision AI · 5s avg cutouts
+              {signedIn ? "You're signed in · jump right in" : "Powered by precision AI · 5s avg cutouts"}
             </div>
             <h1 className="mt-6 text-5xl font-bold leading-[1.05] tracking-tight md:text-7xl">
               Remove. Cut.{" "}
@@ -97,7 +111,7 @@ function Hero() {
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
               <Button asChild size="lg" className="bg-gradient-brand text-primary-foreground border-0 glow hover:opacity-90">
-                <Link to="/auth">Try it free <ArrowRight className="ml-1 h-4 w-4" /></Link>
+                <Link to={ctaTo}>{ctaLabel} <ArrowRight className="ml-1 h-4 w-4" /></Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="border-white/15 bg-white/5 backdrop-blur hover:bg-white/10">
                 <a href="#api"><Code2 className="mr-2 h-4 w-4" /> View API</a>
@@ -118,16 +132,24 @@ function Hero() {
           </div>
         </div>
 
-        {/* Upload zone */}
+        {/* Upload zone — redirects signed-in users straight to the dashboard editor */}
         <div className="mx-auto mt-16 max-w-3xl">
-          <div className="glass group cursor-pointer rounded-2xl border-2 border-dashed border-white/15 p-10 text-center transition-all hover:border-[var(--neon-blue)]/60 hover:glow-sm">
+          <Link
+            to={ctaTo}
+            className="glass group block cursor-pointer rounded-2xl border-2 border-dashed border-white/15 p-10 text-center transition-all hover:border-[var(--neon-blue)]/60 hover:glow-sm"
+          >
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-brand glow-sm">
               <Upload className="h-7 w-7 text-primary-foreground" />
             </div>
-            <h3 className="mt-4 text-xl font-semibold">Drop an image to remove the background</h3>
+            <h3 className="mt-4 text-xl font-semibold">
+              {signedIn ? "Open the editor to remove backgrounds" : "Drop an image to remove the background"}
+            </h3>
             <p className="mt-2 text-sm text-muted-foreground">JPG, PNG, or WEBP · up to 10MB · 5000×5000 max</p>
-            <Button asChild className="mt-6 bg-gradient-brand text-primary-foreground border-0"><Link to="/auth">Choose file</Link></Button>
-          </div>
+            <Button asChild className="mt-6 bg-gradient-brand text-primary-foreground border-0">
+              <span>{signedIn ? "Go to dashboard" : "Choose file"}</span>
+            </Button>
+          </Link>
+
         </div>
       </div>
     </section>
