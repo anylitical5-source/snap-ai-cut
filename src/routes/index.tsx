@@ -87,8 +87,15 @@ function useSignedIn() {
 
 function Hero() {
   const signedIn = useSignedIn();
-  const ctaTo = signedIn ? "/dashboard" : "/auth";
+  const navigate = useNavigate();
   const ctaLabel = signedIn ? "Open dashboard" : "Try it free";
+
+  const goNext = async (e?: React.MouseEvent) => {
+    e?.preventDefault();
+    // Re-check session at click time to avoid races with auth restore
+    const { data } = await supabase.auth.getSession();
+    navigate({ to: data.session ? "/dashboard" : "/auth" });
+  };
 
   return (
     <section className="relative overflow-hidden">
@@ -110,8 +117,8 @@ function Hero() {
               Studio-grade transparent backgrounds in seconds. Built for creators, e-commerce sellers, and product teams who need pixel-perfect cutouts at scale.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
-              <Button asChild size="lg" className="bg-gradient-brand text-primary-foreground border-0 glow hover:opacity-90">
-                <Link to={ctaTo}>{ctaLabel} <ArrowRight className="ml-1 h-4 w-4" /></Link>
+              <Button onClick={goNext} size="lg" className="bg-gradient-brand text-primary-foreground border-0 glow hover:opacity-90">
+                {ctaLabel} <ArrowRight className="ml-1 h-4 w-4" />
               </Button>
               <Button asChild size="lg" variant="outline" className="border-white/15 bg-white/5 backdrop-blur hover:bg-white/10">
                 <a href="#api"><Code2 className="mr-2 h-4 w-4" /> View API</a>
@@ -134,9 +141,10 @@ function Hero() {
 
         {/* Upload zone — redirects signed-in users straight to the dashboard editor */}
         <div className="mx-auto mt-16 max-w-3xl">
-          <Link
-            to={ctaTo}
-            className="glass group block cursor-pointer rounded-2xl border-2 border-dashed border-white/15 p-10 text-center transition-all hover:border-[var(--neon-blue)]/60 hover:glow-sm"
+          <button
+            type="button"
+            onClick={goNext}
+            className="glass group block w-full cursor-pointer rounded-2xl border-2 border-dashed border-white/15 p-10 text-center transition-all hover:border-[var(--neon-blue)]/60 hover:glow-sm"
           >
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-brand glow-sm">
               <Upload className="h-7 w-7 text-primary-foreground" />
@@ -145,11 +153,10 @@ function Hero() {
               {signedIn ? "Open the editor to remove backgrounds" : "Drop an image to remove the background"}
             </h3>
             <p className="mt-2 text-sm text-muted-foreground">JPG, PNG, or WEBP · up to 10MB · 5000×5000 max</p>
-            <Button asChild className="mt-6 bg-gradient-brand text-primary-foreground border-0">
-              <span>{signedIn ? "Go to dashboard" : "Choose file"}</span>
-            </Button>
-          </Link>
-
+            <span className="mt-6 inline-flex items-center justify-center rounded-md bg-gradient-brand text-primary-foreground h-10 px-4 text-sm font-medium">
+              {signedIn ? "Go to dashboard" : "Choose file"}
+            </span>
+          </button>
         </div>
       </div>
     </section>
