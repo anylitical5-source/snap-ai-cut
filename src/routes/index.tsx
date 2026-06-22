@@ -90,11 +90,9 @@ function Hero() {
   const navigate = useNavigate();
   const ctaLabel = signedIn ? "Open dashboard" : "Try it free";
 
-  const goNext = async (e?: React.MouseEvent) => {
+  const goNext = (e?: React.MouseEvent) => {
     e?.preventDefault();
-    // Re-check session at click time to avoid races with auth restore
-    const { data } = await supabase.auth.getSession();
-    navigate({ to: data.session ? "/dashboard" : "/auth" });
+    navigate({ to: "/dashboard" });
   };
 
   return (
