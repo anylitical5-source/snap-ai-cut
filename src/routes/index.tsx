@@ -52,7 +52,7 @@ function Nav() {
         <div className="flex items-center gap-2">
           {signedIn ? (
             <>
-              <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
+              <Button asChild variant="ghost" size="sm">
                 <Link to="/dashboard">Dashboard</Link>
               </Button>
               <Button onClick={handleSignOut} size="sm" variant="outline" className="border-white/15 bg-white/5 hover:bg-white/10">
