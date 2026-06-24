@@ -233,10 +233,12 @@ function Pricing() {
                 ))}
               </ul>
               <Button
+                onClick={() => { window.location.href = "/pricing"; }}
                 className={`mt-8 w-full ${p.highlight ? "bg-background text-foreground hover:bg-background/90" : "bg-gradient-brand text-primary-foreground border-0"}`}
               >
                 {p.cta}
               </Button>
+
             </div>
           ))}
         </div>
