@@ -87,18 +87,12 @@ function useSignedIn() {
 
 function Hero() {
   const signedIn = useSignedIn();
-  const navigate = useNavigate();
   const ctaLabel = signedIn ? "Open dashboard" : "Try it free";
-
-  const goNext = (e?: React.MouseEvent) => {
-    e?.preventDefault();
-    navigate({ to: "/dashboard" });
-  };
 
   return (
     <section className="relative overflow-hidden">
-      <div className="absolute inset-0 grid-bg opacity-40 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
-      <div className="absolute left-1/2 top-0 -z-10 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-[var(--neon-purple)] opacity-20 blur-[120px]" />
+      <div className="pointer-events-none absolute inset-0 grid-bg opacity-40 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
+      <div className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-[var(--neon-purple)] opacity-20 blur-[120px]" />
 
       <div className="mx-auto max-w-7xl px-6 pt-16 pb-24 md:pt-24 md:pb-32">
         <div className="grid items-center gap-12 lg:grid-cols-2">
@@ -115,8 +109,10 @@ function Hero() {
               Studio-grade transparent backgrounds in seconds. Built for creators, e-commerce sellers, and product teams who need pixel-perfect cutouts at scale.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
-              <Button onClick={goNext} size="lg" className="bg-gradient-brand text-primary-foreground border-0 glow hover:opacity-90">
-                {ctaLabel} <ArrowRight className="ml-1 h-4 w-4" />
+              <Button asChild size="lg" className="bg-gradient-brand text-primary-foreground border-0 glow hover:opacity-90">
+                <Link to="/dashboard">
+                  {ctaLabel} <ArrowRight className="ml-1 h-4 w-4" />
+                </Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="border-white/15 bg-white/5 backdrop-blur hover:bg-white/10">
                 <a href="#api"><Code2 className="mr-2 h-4 w-4" /> View API</a>
@@ -139,10 +135,10 @@ function Hero() {
 
         {/* Upload zone — redirects signed-in users straight to the dashboard editor */}
         <div className="mx-auto mt-16 max-w-3xl">
-          <button
-            type="button"
-            onClick={goNext}
+          <Link
+            to="/dashboard"
             className="glass group block w-full cursor-pointer rounded-2xl border-2 border-dashed border-white/15 p-10 text-center transition-all hover:border-[var(--neon-blue)]/60 hover:glow-sm"
+            aria-label="Go to dashboard"
           >
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-brand glow-sm">
               <Upload className="h-7 w-7 text-primary-foreground" />
@@ -154,7 +150,7 @@ function Hero() {
             <span className="mt-6 inline-flex items-center justify-center rounded-md bg-gradient-brand text-primary-foreground h-10 px-4 text-sm font-medium">
               {signedIn ? "Go to dashboard" : "Choose file"}
             </span>
-          </button>
+          </Link>
         </div>
       </div>
     </section>
